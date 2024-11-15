@@ -2,13 +2,14 @@
 
 import { Skeleton } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const inputRef = useRef();
 
   useEffect(() => {
     setLoading(true);
@@ -24,8 +25,17 @@ export default function Home() {
       });
   }, []);
 
-  const handleClick = () => {
-    toast.success("👽");
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetch(
+      process.env.NEXT_PUBLIC_API_URL +
+        "/posts?search=" +
+        inputRef.current.value
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setPosts(res);
+      });
   };
 
   return (
@@ -39,17 +49,20 @@ export default function Home() {
           </p>
         </main>
         <div className="flex justify-end px-4">
-          <input
-            type="text"
-            className="px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Search..."
-          />
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md ml-4"
-            onClick={handleClick}
-          >
-            Search
-          </button>
+          <form onSubmit={handleSearch}>
+            <input
+              ref={inputRef}
+              type="text"
+              className="px-4 py-2 border border-gray-300 rounded-md"
+              placeholder="Search..."
+            />
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-md ml-4"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </form>
         </div>
         <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading ? (
