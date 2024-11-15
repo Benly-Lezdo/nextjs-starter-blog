@@ -1,8 +1,10 @@
 "use client";
 
 import { Skeleton } from "@mui/material";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import dayjs from "dayjs";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -58,18 +60,30 @@ export default function Home() {
             </>
           ) : (
             posts?.map((item, index) => (
-              <div
+              <Link
                 key={index}
-                className="border border-gray-200 p-2 overflow-hidden"
+                href={"/post/" + item?._id}
+                style={{ textDecoration: "none" }}
               >
-                <img
-                  className="w-full h-48 object-cover mb-4 zoom-image"
-                  src={item?.image}
-                  alt="Post Image"
-                />
-                <h2 className="text-xl font-semibold mb-2">{item?.title}</h2>
-                <p className="text-gray-600">{item?.description}</p>
-              </div>
+                <div className="border border-gray-200 p-2 overflow-hidden">
+                  <img
+                    className="w-full h-48 object-cover mb-4 zoom-image"
+                    src={item?.image}
+                    alt="Post Image"
+                  />
+                  <h2
+                    className="text-xl font-semibold mb-2"
+                    style={{ color: "#000080" }}
+                  >
+                    {item?.title}
+                  </h2>
+                  <p style={{ color: "rgb(69 153 175)" }}>
+                    Plublished on{" "}
+                    {dayjs(item?.created_at).format("MMMM-DD-YYYY")}
+                  </p>
+                  <p className="text-gray-600">{item?.short_description}</p>
+                </div>
+              </Link>
             ))
           )}
         </div>
