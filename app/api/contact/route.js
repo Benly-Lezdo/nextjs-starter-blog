@@ -28,9 +28,9 @@ export async function POST(req) {
     return new Response(
       JSON.stringify({
         success: true,
-        msg: "Successfully details have been sent",
+        msg: "Message has been sent Successfully",
       }),
-      { status: 200, }
+      { status: 200 }
     );
   } catch (e) {
     return new Response(
