@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -20,10 +21,27 @@ export default function Contact() {
       if (!emailRegex.test(email)) {
         return toast.error("Please Enter the Correct Email");
       }
-      toast.success("🤡🤡");
-      setName("");
-      setEmail("");
-      setMessage("");
+      try {
+        let data = {
+          name: name,
+          email: email,
+          message: message,
+        };
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/contact", {
+          method: "POST",
+          body: JSON.stringify(data),
+        }).then((res) => {
+          console.log('res', res)
+          if (res?.status == 200) {
+            toast.success("Your message has been sent successfully!");
+            setName("");
+            setEmail("");
+            setMessage("");
+          }
+        });
+      } catch (e) {
+        console.log("e", e);
+      }
     }
   };
 
@@ -68,12 +86,9 @@ export default function Contact() {
               rows="4"
             />
           </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
+          <Button variant="contained" onClick={handleSubmit}>
             Submit
-          </button>
+          </Button>
         </form>
       </main>
     </>

@@ -4,10 +4,12 @@ import { Skeleton } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
+import LoadingButton from "./common/Buttons/LoadingButton";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState(false);
 
   const inputRef = useRef();
 
@@ -27,6 +29,7 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setSearch(true);
     fetch(
       process.env.NEXT_PUBLIC_API_URL +
         "/posts?search=" +
@@ -35,7 +38,8 @@ export default function Home() {
       .then((res) => res.json())
       .then((res) => {
         setPosts(res);
-      });
+      })
+      .finally(() => setSearch(false));
   };
 
   return (
@@ -53,15 +57,14 @@ export default function Home() {
             <input
               ref={inputRef}
               type="text"
-              className="px-4 py-2 border border-gray-300 rounded-md"
+              className="mx-2 px-4 py-2 border border-gray-300 rounded-md"
               placeholder="Search..."
             />
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md ml-4"
+            <LoadingButton
+              label="Search"
+              loading={search}
               onClick={handleSearch}
-            >
-              Search
-            </button>
+            />
           </form>
         </div>
         <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -71,7 +74,7 @@ export default function Home() {
               <Skeleton sx={{ height: "250px" }} />
               <Skeleton sx={{ height: "250px" }} />
             </>
-          ) : (
+          ) : posts.length > 0 ? (
             posts?.map((item, index) => (
               <Link
                 key={index}
@@ -91,13 +94,19 @@ export default function Home() {
                     {item?.title}
                   </h2>
                   <p style={{ color: "rgb(69 153 175)" }}>
-                    Plublished on{" "}
+                    Published on{" "}
                     {dayjs(item?.created_at).format("MMMM-DD-YYYY")}
                   </p>
                   <p className="text-gray-600">{item?.short_description}</p>
                 </div>
               </Link>
             ))
+          ) : (
+            <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center text-gray-500">
+              <h4>
+                No results found in <b>{inputRef?.current?.value}</b>
+              </h4>
+            </div>
           )}
         </div>
       </div>
