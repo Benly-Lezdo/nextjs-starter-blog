@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "About us page",
+  description: "Benly is a developer",
+};
+
 export default function About() {
   return (
     <>
