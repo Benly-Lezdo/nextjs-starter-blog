@@ -1,8 +1,17 @@
 "use client";
 
-import { Box, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Rating,
+  Skeleton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import dayjs from "dayjs";
 import { use, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Post({ params }) {
   const resolvedParams = use(params);
@@ -10,6 +19,9 @@ export default function Post({ params }) {
 
   const [val, setVal] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [starValue, setStarValue] = useState(0);
+  const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -20,6 +32,50 @@ export default function Post({ params }) {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (email.length > 3) {
+      setEmailErr(false);
+    }
+  }, [email]);
+
+  const handleSave = async () => {
+    if (email.length < 3) {
+      setEmailErr(true);
+    }
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      return setEmailErr("Please Enter the Correct Email");
+    }
+    if (email.length > 3) {
+      try {
+        let data = {
+          post_id: id,
+          email: email,
+          rating: starValue,
+        };
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/rating", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const response = await res.json();
+
+        if (res?.status == 200) {
+          toast.success(response.msg);
+          setEmail("");
+          setStarValue(0);
+        } else {
+          toast.error(response.msg);
+        }
+      } catch (e) {
+        console.log("e", e);
+      }
+    }
+  };
 
   return (
     <>
@@ -51,6 +107,60 @@ export default function Post({ params }) {
             <p>{val?.description}</p>
           </main>
         )}
+        <Stack spacing={1}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Rate us
+              <Rating
+                name="half-rating"
+                value={starValue}
+                onChange={(e, v) => {
+                  console.log("vv", v);
+                  setStarValue(v);
+                }}
+              />
+            </Box>
+            {starValue > 0 && (
+              <>
+                <TextField
+                  size="small"
+                  label="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  error={emailErr}
+                />
+                <Typography
+                  sx={{
+                    color: "red",
+                    fontSize: "12px",
+                  }}
+                >
+                  {emailErr}
+                </Typography>
+                <Button
+                  variant="contained"
+                  className="mt-2"
+                  onClick={handleSave}
+                >
+                  Send
+                </Button>
+              </>
+            )}
+          </Box>
+        </Stack>
       </div>
     </>
   );

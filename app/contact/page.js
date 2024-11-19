@@ -1,13 +1,14 @@
 "use client";
 
-import { Button } from "@mui/material";
 import { useState } from "react";
 import { toast } from "sonner";
+import LoadingButton from "../common/Buttons/LoadingButton";
 
 export default function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ export default function Contact() {
     if (!emailRegex.test(email)) {
       return toast.error("Please Enter the Correct Email");
     }
-
+    setLoading(true);
     try {
       let data = {
         name: name,
@@ -41,10 +42,12 @@ export default function Contact() {
       console.log("response", response);
       if (res.status == 200) {
         toast.success(response.msg);
+        setLoading(false);
         setName("");
         setEmail("");
         setMessage("");
       } else {
+        setLoading(false);
         toast.error(response.msg);
       }
     } catch (e) {
@@ -93,9 +96,11 @@ export default function Contact() {
               rows="4"
             />
           </div>
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit
-          </Button>
+          <LoadingButton
+            label="Submit"
+            loading={loading}
+            onClick={handleSubmit}
+          />
         </form>
       </main>
     </>
