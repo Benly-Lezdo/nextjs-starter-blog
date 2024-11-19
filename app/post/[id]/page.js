@@ -128,7 +128,6 @@ export default function Post({ params }) {
                 name="half-rating"
                 value={starValue}
                 onChange={(e, v) => {
-                  console.log("vv", v);
                   setStarValue(v);
                 }}
               />

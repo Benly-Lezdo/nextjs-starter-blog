@@ -15,7 +15,7 @@ export async function POST(req) {
       return new Response(
         JSON.stringify({
           success: false,
-          msg: "Rating already subbmitted",
+          msg: "Rating already submitted",
           email: existingRating.email,
         }),
         { status: 422 }
@@ -28,7 +28,7 @@ export async function POST(req) {
     return new Response(
       JSON.stringify({
         success: true,
-        msg: "Rating subbmitted Successfully",
+        msg: "Rating submitted Successfully",
       }),
       { status: 200 }
     );
