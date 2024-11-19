@@ -22,7 +22,7 @@ export async function POST(req) {
       );
     }
 
-    // Create a new contact
+    // Create a new rating
     await RatingModel.create(rat);
 
     return new Response(
