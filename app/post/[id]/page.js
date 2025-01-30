@@ -106,7 +106,7 @@ export default function Post({ params }) {
               src={val?.image}
               alt="Post Image"
             />
-            <p className={!show && "shade"}>{val?.description}</p>
+            <p className={show ? "" : "shade"}>{val?.description}</p>
             <Button variant="outlined" onClick={() => setShow(!show)} endIcon={
               <>
                 {show ? <MdKeyboardArrowDown /> :
