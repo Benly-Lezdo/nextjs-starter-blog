@@ -27,3 +27,12 @@ body {
 .zoom-image:hover {
   transform: scale(1.05);
 }
+
+.shade {
+  mask-image: linear-gradient(#fff, #fff, hsla(0, 0%, 100%, 0));
+  display: -webkit-box !important;
+  text-overflow: ellipsis "[...]";
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}

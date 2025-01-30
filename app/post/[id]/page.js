@@ -12,6 +12,8 @@ import {
 import dayjs from "dayjs";
 import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowUp } from "react-icons/md";
 
 export default function Post({ params }) {
   const resolvedParams = use(params);
@@ -22,6 +24,7 @@ export default function Post({ params }) {
   const [starValue, setStarValue] = useState(0);
   const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -102,9 +105,15 @@ export default function Post({ params }) {
               height={200}
               src={val?.image}
               alt="Post Image"
-              className=""
             />
-            <p>{val?.description}</p>
+            <p className={!show && "shade"}>{val?.description}</p>
+            <Button variant="outlined" onClick={() => setShow(!show)} endIcon={
+              <>
+                {show ? <MdKeyboardArrowDown /> :
+                  <MdKeyboardArrowUp />}
+              </>
+            }
+            > {show ? "Show Less " : "Show More "}</Button>
           </main>
         )}
         <Stack spacing={1}>
