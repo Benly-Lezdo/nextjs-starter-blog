@@ -22,7 +22,7 @@ export default function Home() {
         setLoading(false);
       })
       .catch((e) => {
-        console.error(e);
+        console.log('e', e)
         setLoading(false);
       });
   }, []);
@@ -32,8 +32,8 @@ export default function Home() {
     setSearch(true);
     fetch(
       process.env.NEXT_PUBLIC_API_URL +
-        "/posts?search=" +
-        inputRef.current.value
+      "/posts?search=" +
+      inputRef.current.value
     )
       .then((res) => res.json())
       .then((res) => {
