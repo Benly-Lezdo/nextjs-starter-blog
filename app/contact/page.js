@@ -38,7 +38,6 @@ export default function Contact() {
       });
 
       const response = await res.json();
-
       console.log("response", response);
       if (res.status == 200) {
         toast.success(response.msg);
