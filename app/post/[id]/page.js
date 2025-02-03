@@ -14,6 +14,7 @@ import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
+import { Form } from "react-bootstrap";
 
 export default function Post({ params }) {
   const resolvedParams = use(params);
@@ -42,7 +43,9 @@ export default function Post({ params }) {
     }
   }, [email]);
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault()
+
     if (email.length < 3) {
       setEmailErr(true);
     }
@@ -143,28 +146,29 @@ export default function Post({ params }) {
             </Box>
             {starValue > 0 && (
               <>
-                <TextField
-                  size="small"
-                  label="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  error={emailErr}
-                />
-                <Typography
-                  sx={{
-                    color: "red",
-                    fontSize: "12px",
-                  }}
-                >
-                  {emailErr}
-                </Typography>
-                <Button
-                  variant="contained"
-                  className="mt-2"
-                  onClick={handleSave}
-                >
-                  Send
-                </Button>
+                <Form onSubmit={handleSave}>
+                  <TextField
+                    size="small"
+                    label="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    error={emailErr}
+                  />
+                  <Typography
+                    sx={{
+                      color: "red",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {emailErr}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    className="mt-2"
+                  >
+                    Send
+                  </Button>
+                </Form>
               </>
             )}
           </Box>
