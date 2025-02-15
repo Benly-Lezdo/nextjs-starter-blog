@@ -36,7 +36,7 @@ export default function Post({ params }) {
         setVal(res);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (email.length > 3) {
