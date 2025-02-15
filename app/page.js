@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import LoadingButton from "./common/Buttons/LoadingButton";
-import Image from "next/image";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -83,7 +82,7 @@ export default function Home() {
                 style={{ textDecoration: "none" }}
               >
                 <div className="border border-gray-200 p-2 overflow-hidden">
-                  <Image
+                  <img
                     className="w-full h-48 object-cover mb-4 zoom-image"
                     src={item?.image}
                     alt="Post Image"

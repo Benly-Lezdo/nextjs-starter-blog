@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { Form } from "react-bootstrap";
-import Image from "next/image";
 
 export default function Post({ params }) {
   const resolvedParams = use(params);
@@ -36,7 +35,7 @@ export default function Post({ params }) {
         setVal(res);
         setLoading(false);
       });
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (email.length > 3) {
@@ -104,7 +103,7 @@ export default function Post({ params }) {
             <p className="text-gray-500">
               Published on {dayjs(val?.created_at).format("MMMM-DD-YYYY")}
             </p>
-            <Image
+            <img
               width={350}
               height={200}
               src={val?.image}
